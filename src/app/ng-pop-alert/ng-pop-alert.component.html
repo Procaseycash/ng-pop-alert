@@ -1,0 +1,6 @@
+<div [class.notification-display]="overlay"  [hidden]="!alert['visible']">
+  <div class="{{alert['alert_class']}}" role="alert" align="left" style="position: relative; padding: 10px;">
+    <a role="button" (click)="alert['visible']=false" class="pull-right alert-link">&nbsp; <i class="fa fa-close"></i> </a>
+    <span style="font-size:13px;" [innerHTML]="message"></span>
+  </div>
+</div>

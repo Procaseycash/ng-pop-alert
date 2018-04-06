@@ -1,5 +1,4 @@
-export {EventsService} from './src/app/table-searcher/event.service';
-export {TableSearcherService} from './src/app/table-searcher/table-searcher.service';
-export {TableSearcherInterface} from './src/app/table-searcher/table-searcher.interface';
-export {TableSearcherTypesEnum} from './src/app/table-searcher/table-seacher-types.enum';
-export {AngularTableSearcherModule} from './src/app/table-searcher/angular-table-searcher.module';
+// export {AlertEventService} from './src/app/ng-pop-alert/alert.event.service';
+export {NgPopAlertService} from './src/app/ng-pop-alert/ng-pop-alert.service';
+export {NG_POP_ALERT_CONF} from './src/app/ng-pop-alert/ng-pop-alert.conf';
+export {NgPopAlertModule} from './src/app/ng-pop-alert/ng-pop-alert.module';

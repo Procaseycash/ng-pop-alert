@@ -1,6 +1,6 @@
 {
-  "name": "angular-table-searcher",
-  "version": "4.0.5",
+  "name": "ng-pop-alert",
+  "version": "4.0.0",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -53,19 +53,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Procaseycash/angular-table-searcher.git"
+    "url": "git+https://github.com/Procaseycash/ng-pop-alert.git"
   },
   "keywords": [
-    "Table",
+    "Notification",
     "Angular",
-    "Searcher"
+    "Alert",
+    "Pop"
   ],
   "author": "Kazeem Olanipekun <kezyolanipekun@gmail.com>",
   "contributors": [
     "Kazeem Olanipekun <kezyolanipekun@gmail.com>"
   ],
   "bugs": {
-    "url": "https://github.com/Procaseycash/angular-table-searcher/issues"
+    "url": "https://github.com/Procaseycash/ng-pop-alert/issues"
   },
-  "homepage": "https://github.com/Procaseycash/angular-table-searcher#README"
+  "homepage": "https://github.com/Procaseycash/ng-pop-alert#README"
 }
