@@ -1,6 +1,6 @@
-# AngularTableSearcher (Angular ^4...)
+# NgPopAlert (Angular ^4...)
 
-This is an angular table searcher. it helps to use keys provided to search through a list of objects and if no keys are provided, it searches for the occurrence of the input value. it also makes request to endpoint if url is provided for backend search.     
+This is an angular Notification or Alert . it help you to notify messages to users of your application in every state it is required.     
 
  ## Release Note
  Due to compatibility issues in Angular 4 & 5, we will maintain all:
@@ -8,65 +8,45 @@ This is an angular table searcher. it helps to use keys provided to search throu
  Angular 4 from 4.0.0 and above.
  Angular 5 from 5.0.0 and above.
  ````
-
- ## Dependencies
- 
- `npm install font-awesome --save`
- 
- Read up on how to setup font-awesome in your application.
  
  ## Installation
  
- `npm install --save angular-table-searcher`
+ `npm install --save ng-pop-alert`
 
    
 ## Usage in Application
 
-Follow the instruction below to use angular-table-searcher.
+Follow the instruction below to use ng-pop-alert.
 
-`import {AngularTableSearcherModule} from 'angular-table-searcher';`
+`import {NgPopAlertModule} from 'ng-pop-alert';`
 
-Add `AngularTableSearcherModule.forRoot()` in AppModule or Other Modules using `AngularTableSearcherModule`
+Add `NgPopAlertModule.forRoot()` in AppModule or Other Modules using `NgPopAlertModule`
      
    # Notice: 
   ```` 
-  path: full path of the api url to call for search option.
-  from: the key the eventService will use in mapping when data has responded from angular-table-seacher. (from key must be unique to every component using searcher)
-  data: (paginated response), this must be the first data rendered from the component which information are picked to enable searching.
-  searchKeys: Keys to tell the AngularTableSearcher to use to filter data but can be empty array to search all through object and its child.
-  searchType: We have three search types which can be from backend, table, table not found with backend.
-  placeholder: What to display in the input field as a message
-  buttonColor: The background color of the table seacher.
-  borderColor: The border-bottom color of the table seacher.
-  queryField: The field name to pass search value into. such as search will be search='value entered'
+  We have the following methods you can use to notify message and message passed can be a SafeHTML or string.
+    
+    success: for success alert. Accepts SafeHtml | string
+    warning: for warning alert. Accepts SafeHtml | string
+    info: for information alert. Accepts SafeHtml | string
+    error: for error alert (This can accept default message and optional backend error, if backend response error is passed, this will be used). Accepts Object | Array<SafeHtml | string> | Array<Object> 
+    clear: to destroy current open alert but alert disappears based on configured time.
+    
+  
+  NgPopAlert can be used as an:
+   
+   Overlay: This is best used while the <ng-pop-alert></ng-pop-alert> is reference in a top level component that is always visible throughout the entire state of the angular app. such as usage in app.component and header layout component of your application.
+   No Overlay: This is best used if you need to override the overlay approach for a specific component and render it in that current component content.  <ng-pop-alert [overlay]="false"></ng-pop-alert>. you can also choose to use this alert in every component like this but it is not advisable to do so. 
   ````
   
-  A sample AngularTableSearcher built url for searching will be `http://localhost:8088/api/organizations?search=olanipekun'`
-  
-  
-   ## *.component.ts
-   
-   Add/refactor the following code to the appropriate places in your component.ts
-   
-   
-  ## searching
-      Searching can either be done with enter or button click after value has been supplied.
- 
-  ## Response
-  The response from angular-table-searcher is an object of type:
-  ````
-  {
-  result: Object | Array,
-  data: Array // data passed down to table-searcher.
-  }
-  ````    
-  
+#Sample Usage 
+#####(*.ts) 
 ````
 import {Component, OnInit} from '@angular/core';
-import {Http} from "@angular/http";
-import 'rxjs/add/operator/map';
-import {EventsService, TableSearcherTypesEnum} from "angular-table-searcher";
-import {TableSearcherInterface} from "./table-searcher/table-searcher.interface";
+import {NG_POP_ALERT_CONF} from 'ng-pop-alert';
+import {NgPopAlertService} from 'ng-pop-alert';
+import {SafeHtml} from "@angular/platform-browser";
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -74,81 +54,87 @@ import {TableSearcherInterface} from "./table-searcher/table-searcher.interface"
 })
 export class AppComponent implements OnInit {
   title = 'app';
-   public tableSearcher: TableSearcherInterface<Object> = {
-     path: 'http://localhost:8088/api/organizations',
-     searchType: TableSearcherTypesEnum.EMPTY_TABLE_APPLY_BACKEND,
-     searchKeys: ['name', 'email'], // can be empty array to enable deep searching
-     borderColor: '',
-     buttonColor: '',
-     queryField: 'search',
-     data: null,
-     placeholder: 'Filter information...',
-     from: 'search_organizations'
-   };
+  styles = {
+    border: '2px solid red'
+  };
 
-  constructor(private eventsService: EventsService, private http: Http) {
-    this.eventsService.on(this.tableSearcher.from, (res) => {
-      // Note that table will response from table searcher will respond with result and data,
-      // the result is the searched item while data is the previous data passed down to it.
-      // the result can be of array or object.
-      // if result is an array, that is the final result
-      // but if result is object, it denotes a backend response, so you can drill down to pick the searched result depending on your api response.
-      // console.log('response=', res);
-      this.tableSearcher.data = (res['result'].constructor === Array) ? res['result'] : res['result'].data['data']; // update table data in view
-    });
+  constructor(private ngAlertService: NgPopAlertService) {
+    NG_POP_ALERT_CONF.duration = 5000; // milliseconds
   }
-  private getOrganizations() {
-    this.http.get(this.tableSearcher.path)
-      .map( res => res.json()).subscribe(
-      (res) => {
-        this.tableSearcher.data = res['data']['data'];
-      },
-      (err) => {
 
-      }
-    );
+  success() {
+    const msg: SafeHtml = `<b>Hello world</b>`;
+    this.ngAlertService.success(msg);
+  }
+
+  info() {
+    this.ngAlertService.info('Hello world');
+  }
+
+  warning() {
+    this.ngAlertService.warning('Hello world');
+  }
+
+  error() {
+    this.ngAlertService.error('Hello world');
+  }
+
+  clear() {
+    this.ngAlertService.clear();
+  }
+
+  errorWithData() {
+    const response = {
+      errors: ['Username not filled', 'Email field is empty'], // can be String | Array<Object> | Array<String> | Object
+      status: 400,
+      message: 'Unable to process information'
+    };
+    this.ngAlertService.error('Error encountered', response['errors']);
   }
 
   ngOnInit() {
-    this.getOrganizations();
   }
 }
 
-
-      
   ````
   
-  ## *.component.html
-  Add this below the table you want it to paginate data from backend.
-  
+  #####(*.html)
+
   ````
-<div style="width: 30%; margin: 10px auto;" *ngIf="tableSearcher.data">
-  <app-table-searcher [allSettings]="tableSearcher"></app-table-searcher>
-  <table width="100%" class="table table-striped table-responsive">
-    <tr>
-      <td>#</td>
-      <td>Name</td>
-    </tr>
-
-    <tr *ngFor="let page of tableSearcher.data; let i = index;">
-      <td>{{(i + 1)}}</td>
-      <td>{{page?.name}}</td>
-    </tr>
-
-  </table>
-
-
+<div style="text-align:center">
+  <h1>
+    Welcome to {{ title }}!
+  </h1>
+  <img width="300" alt="Angular Logo"
+       src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
 </div>
+<h2>Here are some test scenario </h2>
+
+<!-- input [overlay] is by default true and you can also customize the behaviour by passing down css rules with input [styles]  -->
+<ng-pop-alert></ng-pop-alert>
+
+<ul>
+  <li>
+    <h2><button type="button" role="button" (click)="success()">Success Alert</button></h2>
+  </li>
+  <li>
+    <h2><button  type="button" role="button" (click)="info()">Info Alert</button></h2>
+  </li>
+  <li>
+    <h2><button  type="button" role="button" (click)="warning()">Warning Alert</button></h2>
+  </li>
+  <li>
+    <h2><button  type="button" role="button" (click)="error()">Error with no error Data Alert</button></h2>
+  </li>
+  <li>
+    <h2><button  type="button" role="button" (click)="errorWithData()">Error with error Data Alert</button></h2>
+  </li>
+  <li>
+    <h2><button  type="button" role="button" (click)="clear()">Clear alert</button></h2>
+  </li>
+</ul>
 ````
 
-## Backend expected request
-
-Your backend will expect 
-
-````
-queryField: any type to search information
-````
- 
 ## Build as a package
 
 `npm run pack-build`

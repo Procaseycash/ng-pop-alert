@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import {ValidationErrorService} from './validation-error.service';
 import {AlertEventService} from './alert.event.service';
+import {SafeHtml} from '@angular/platform-browser';
+import {Alert} from './ng-pop-alert.interface';
 
 @Injectable()
 export class NgPopAlertService {
-  public alert = {
+  public alert: Alert = {
     visible: false,
     message: '',
     type: '',
@@ -17,7 +19,7 @@ export class NgPopAlertService {
    * @param message
    * @returns {{message: string, alert_class: string}}
    */
-  success(message: string) {
+  success(message: SafeHtml | string) {
     this.alert['alert_class'] = 'alert alert-success animated fadeIn';
     this.alert['message'] = message;
     this.alert['visible'] = true;
@@ -31,7 +33,7 @@ export class NgPopAlertService {
    * @param message
    * @returns {{message: string, alert_class: string}}
    */
-  info(message: string) {
+  info(message: SafeHtml | string) {
     this.alert['alert_class'] = 'alert alert-info animated fadeIn';
     this.alert['message'] = message;
     this.alert['visible'] = true;
@@ -45,7 +47,7 @@ export class NgPopAlertService {
    * @param message
    * @returns {{message: string, alert_class: string}}
    */
-  warning(message: string) {
+  warning(message: SafeHtml | string) {
     this.alert['alert_class'] = 'alert alert-warning animated fadeIn';
     this.alert['message'] = message;
     this.alert['visible'] = true;
@@ -56,15 +58,15 @@ export class NgPopAlertService {
 
   /**
    * Error Alert
-   * @param message
+   * @param defaultMessage
    * @param data
    * @returns {{message: string, alert_class: string}}
    */
-  error(message: string, data?: Object | Array<string> | Array<Object>) {
+  error(defaultMessage: SafeHtml | string, data?: String | Object | Array<SafeHtml | string> | Array<Object>) {
     this.alert['alert_class'] = 'alert alert-danger animated fadeIn';
-    this.alert['message'] = message;
+    this.alert['message'] = defaultMessage;
     if (data) {
-      this.alert['message'] = this.showError(data, message);
+      this.alert['message'] = this.showError(data, defaultMessage);
     }
     this.alert['visible'] = true;
     this.alert['type'] = 'error';

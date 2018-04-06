@@ -4,6 +4,7 @@ import {AlertEventService} from './alert.event.service';
 import {HttpModule} from '@angular/http';
 import {NgPopAlertService} from './ng-pop-alert.service';
 import {NgPopAlertComponent} from './ng-pop-alert.component';
+import {ValidationErrorService} from './validation-error.service';
 
 @NgModule({
   imports: [
@@ -17,7 +18,7 @@ export class NgPopAlertModule {
   static forRoot() {
     return {
       ngModule: NgPopAlertModule,
-      providers: [NgPopAlertService, AlertEventService]
+      providers: [NgPopAlertService, AlertEventService, ValidationErrorService]
     };
   }
 }

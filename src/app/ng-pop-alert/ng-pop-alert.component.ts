@@ -1,15 +1,16 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {DomSanitizer} from '@angular/platform-browser';
+import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {AlertEventService} from './alert.event.service';
 import {NG_POP_ALERT_CONF} from './ng-pop-alert.conf';
 
 @Component({
-  selector: 'app-ng-pop-alert',
+  selector: 'ng-pop-alert',
   templateUrl: './ng-pop-alert.component.html',
   styleUrls: ['./ng-pop-alert.component.css']
 })
 export class NgPopAlertComponent implements OnInit {
   @Input() overlay = true;
+  @Input() styles = {};
   public alert = {
     visible: false,
     message: '',
@@ -17,7 +18,7 @@ export class NgPopAlertComponent implements OnInit {
     alert_class: ''
   };
   public alertClosure;
-  public message: any;
+  public message: SafeHtml | string = ``;
 
   constructor(private sanitizer: DomSanitizer, private alertEventService: AlertEventService) {
   }
@@ -34,7 +35,7 @@ export class NgPopAlertComponent implements OnInit {
       clearTimeout(this.alertClosure);
       setTimeout(() => {
         this.alert = data;
-        // console.log('alert=', data);
+        console.log('duration=', NG_POP_ALERT_CONF.duration);
         this.message = this.sanitizer.bypassSecurityTrustHtml(this.alert['message']);
         this.closeAlert();
       }, 200);

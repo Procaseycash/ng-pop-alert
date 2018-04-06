@@ -1,8 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
-import {AngularTableSearcherModule} from './table-searcher/ng-pop-alert.module';
-import {HttpModule} from "@angular/http";
+import {NgPopAlertModule} from "./ng-pop-alert/ng-pop-alert.module";
 
 
 @NgModule({
@@ -11,8 +10,7 @@ import {HttpModule} from "@angular/http";
   ],
   imports: [
     BrowserModule,
-    HttpModule,
-    AngularTableSearcherModule.forRoot()
+    NgPopAlertModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]
