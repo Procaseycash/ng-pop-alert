@@ -1,9 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {EventsService} from "./table-searcher/event.service";
-import 'rxjs/add/operator/map';
-import {TableSearcherTypesEnum} from "./table-searcher/table-seacher-types.enum";
-import {TableSearcherInterface} from "./table-searcher/table-searcher.interface";
-import {HttpClient} from "@angular/common/http";
+import {NG_POP_ALERT_CONF} from './ng-pop-alert/ng-pop-alert.conf';
+import {NgPopAlertService} from './ng-pop-alert/ng-pop-alert.service';
+import {SafeHtml} from "@angular/platform-browser";
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -11,41 +10,45 @@ import {HttpClient} from "@angular/common/http";
 })
 export class AppComponent implements OnInit {
   title = 'app';
-  public tableSearcher: TableSearcherInterface<Object> = {
-    path: 'http://localhost:8088/api/organizations',
-    searchType: TableSearcherTypesEnum.EMPTY_TABLE_APPLY_BACKEND,
-    searchKeys: ['name', 'email'], // can be empty array to enable deep searching
-    borderColor: '',
-    buttonColor: '',
-    queryField: 'search',
-    data: null,
-    placeholder: 'Filter information...',
-    from: 'search_organizations'
+  styles = {
+    border: '2px solid red'
   };
 
-  constructor(private eventsService: EventsService, private http: HttpClient) {
-    this.eventsService.on(this.tableSearcher.from, (res) => {
-      // Note that table will response from table searcher will respond with result and data,
-      // the result is the searched item while data is the previous data passed down to it.
-      // the result can be of array or object.
-      // if result is an array, that is the final result
-      // but if result is object, it denotes a backend response, so you can drill down to pick the searched result depending on your api response.
-      // console.log('response=', res);
-      this.tableSearcher.data = (res['result'].constructor === Array) ? res['result'] : res['result'].data['data']; // update table data in view
-    });
+  constructor(private ngAlertService: NgPopAlertService) {
+    NG_POP_ALERT_CONF.duration = 18000; // milliseconds
   }
-  private getOrganizations() {
-    this.http.get(this.tableSearcher.path).subscribe(
-      (res) => {
-        this.tableSearcher.data = res['data']['data'];
-      },
-      (err) => {
 
-      }
-    );
+  success() {
+    const msg: SafeHtml = `<b>Hello world</b>`;
+    this.ngAlertService.success(msg);
+  }
+
+  info() {
+    this.ngAlertService.info('Hello world');
+  }
+
+  warning() {
+    this.ngAlertService.warning('Hello world');
+  }
+
+  error() {
+    this.ngAlertService.error('Hello world');
+  }
+
+  clear() {
+    this.ngAlertService.clear();
+  }
+
+  errorWithData() {
+    const response = {
+      errors: ['Username not filled', 'Email field is empty'], // can be String | Array<Object> | Array<String> | Object
+      status: 400,
+      message: 'Unable to process information'
+    };
+    this.ngAlertService.error('Error encountered', response['errors']);
   }
 
   ngOnInit() {
-    this.getOrganizations();
   }
 }
+
