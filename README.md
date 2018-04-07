@@ -85,7 +85,7 @@ export class AppComponent implements OnInit {
 
   errorWithData() {
     const response = {
-      errors: ['Username not filled', 'Email field is empty'], // can be String | Array<Object> | Array<String> | Object
+      errors: ['Username not filled', 'Email field is empty'], // can be SafeHtml | String | Array<Object> | Array<SafeHtml | String> | Object
       status: 400,
       message: 'Unable to process information'
     };
